@@ -31,7 +31,7 @@ export function getResourceUri(cicsPlexName: string, regionName: string, resourc
                      cicsPlex + region;
 
   if (criteria != null) {
-    cmciResource = cmciResource + delimiter + "CRITERIA=" + encodeURIComponent( "(" + criteria  + ")");
+    cmciResource = cmciResource + delimiter + "CRITERIA=(" + encodeURIComponent(criteria) + ")";
     delimiter = "&";
   }
 
