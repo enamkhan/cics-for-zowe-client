@@ -9,13 +9,12 @@
  *
  */
 
-import { TreeItemCollapsibleState, TreeItem, window } from "vscode";
-import { CICSProgramTreeItem } from "./treeItems/CICSProgramTreeItem";
-import { CICSRegionTree } from "./CICSRegionTree";
 import { getResource } from "@zowe/cics-for-zowe-sdk";
-import * as https from "https";
+import { TreeItem, TreeItemCollapsibleState, window } from "vscode";
 import { getDefaultProgramFilter, toEscapedCriteriaString } from "../utils/filterUtils";
 import { getIconPathInResources } from "../utils/profileUtils";
+import { CICSRegionTree } from "./CICSRegionTree";
+import { CICSProgramTreeItem } from "./treeItems/CICSProgramTreeItem";
 export class CICSProgramTree extends TreeItem {
   children: CICSProgramTreeItem[] = [];
   parentRegion: CICSRegionTree;
@@ -41,7 +40,6 @@ export class CICSProgramTree extends TreeItem {
     }
     this.children = [];
     try {
-      https.globalAgent.options.rejectUnauthorized = this.parentRegion.parentSession.session.ISession.rejectUnauthorized;
 
       const programResponse = await getResource(this.parentRegion.parentSession.session, {
         name: "CICSProgram",
@@ -49,7 +47,6 @@ export class CICSProgramTree extends TreeItem {
         cicsPlex: this.parentRegion.parentPlex ? this.parentRegion.parentPlex.getPlexName() : undefined,
         criteria: criteria,
       });
-      https.globalAgent.options.rejectUnauthorized = undefined;
       const programsArray = Array.isArray(programResponse.response.records.cicsprogram)
         ? programResponse.response.records.cicsprogram
         : [programResponse.response.records.cicsprogram];
@@ -60,7 +57,6 @@ export class CICSProgramTree extends TreeItem {
       }
       this.iconPath = getIconPathInResources("folder-open-dark.svg", "folder-open-light.svg");
     } catch (error) {
-      https.globalAgent.options.rejectUnauthorized = undefined;
       if (error.mMessage!.includes("exceeded a resource limit")) {
         window.showErrorMessage(`Resource Limit Exceeded - Set a program filter to narrow search`);
       } else if (this.children.length === 0) {

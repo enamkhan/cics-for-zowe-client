@@ -146,7 +146,6 @@ export class ProfileManagement {
             window.showErrorMessage(
               `Cannot find region ${profile.profile.regionName} in plex ${profile.profile.cicsPlex} for profile ${profile.name}`
             );
-            https.globalAgent.options.rejectUnauthorized = undefined;
             throw new Error("Region Not Found");
           }
         }
@@ -185,7 +184,6 @@ export class ProfileManagement {
           });
         } else {
           window.showErrorMessage(`Cannot find region ${profile.profile.regionName} for profile ${profile.name}`);
-          https.globalAgent.options.rejectUnauthorized = undefined;
           throw new Error("Region Not Found");
         }
       } else {
@@ -241,13 +239,11 @@ export class ProfileManagement {
               group: false,
             });
           } catch (e2) {
-            https.globalAgent.options.rejectUnauthorized = undefined;
             throw e2;
           }
         }
       }
     }
-    https.globalAgent.options.rejectUnauthorized = undefined;
     return infoLoaded;
   }
 
@@ -264,9 +260,7 @@ export class ProfileManagement {
           password: profile.profile.password,
         },
       };
-      https.globalAgent.options.rejectUnauthorized = profile.profile.rejectUnauthorized;
       const regionResponse = await ProfileManagement.makeRequest(`/CICSManagedRegion/${plex.getPlexName()}`, config);
-      https.globalAgent.options.rejectUnauthorized = undefined;
       if (regionResponse.status === 200) {
         const jsonFromXml = ProfileManagement.cmciResponseXml2Json(regionResponse.data);
         if (jsonFromXml.response.records && jsonFromXml.response.records.cicsmanagedregion) {
@@ -296,9 +290,7 @@ export class ProfileManagement {
           SUMMONLY: "",
         },
       };
-      https.globalAgent.options.rejectUnauthorized = profile.profile.rejectUnauthorized;
       const allProgramsResponse = await ProfileManagement.makeRequest(`/${resourceName}/${plexName}${group ? `/${group}` : ""}`, config);
-      https.globalAgent.options.rejectUnauthorized = undefined;
       if (allProgramsResponse.status === 200) {
         const jsonFromXml = ProfileManagement.cmciResponseXml2Json(allProgramsResponse.data);
         if (jsonFromXml.response && jsonFromXml.response.resultsummary) {
@@ -321,9 +313,7 @@ export class ProfileManagement {
           password: profile.profile.password,
         },
       };
-      https.globalAgent.options.rejectUnauthorized = profile.profile.rejectUnauthorized;
       const allItemsResponse = await ProfileManagement.makeRequest(`/CICSResultCache/${cacheToken}/${start}/${increment}`, config);
-      https.globalAgent.options.rejectUnauthorized = undefined;
       if (allItemsResponse.status === 200) {
         const jsonFromXml = ProfileManagement.cmciResponseXml2Json(allItemsResponse.data);
         if (jsonFromXml.response && jsonFromXml.response.records && jsonFromXml.response.records[resourceName.toLowerCase()]) {
