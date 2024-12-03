@@ -32,12 +32,14 @@ export async function getResource(session: AbstractSession, parms: IResourceParm
 
   Logger.getAppLogger().debug("Attempting to get resource(s) with the following parameters:\n%s", JSON.stringify(parms));
 
-  const cicsPlex = parms.cicsPlex == null ? "" : parms.cicsPlex + "/";
-  let cmciResource = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-        parms.name + "/" + cicsPlex + parms.regionName;
+  const cicsPlex = parms.cicsPlex == null ? "" : parms.cicsPlex + CicsCmciConstants.SEPERATOR;
+  const regionName = parms.regionName == null ? "" : parms.regionName;
+
+  let cmciResource = CicsCmciConstants.SEPERATOR + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + CicsCmciConstants.SEPERATOR +
+        parms.name + CicsCmciConstants.SEPERATOR + cicsPlex + regionName;
 
   if (parms.criteria != null) {
-    cmciResource = cmciResource + delimiter + "CRITERIA=(" + encodeURIComponent(parms.criteria) + ")";
+    cmciResource = cmciResource + delimiter + "CRITERIA=" + encodeURIComponent( "(" + parms.criteria  + ")");
     delimiter = "&";
   }
 

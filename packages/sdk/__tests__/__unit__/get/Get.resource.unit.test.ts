@@ -26,13 +26,6 @@ describe("CMCI - Get resource", () => {
   const criteria = "program=D*";
   const content = "This\nis\r\na\ntest" as unknown as ICMCIApiResponse;
 
-  const resourceParms: IResourceParms = {
-    regionName: region,
-    name: resource,
-    criteria,
-    cicsPlex: undefined
-  };
-
   const dummySession = new Session({
     user: "fake",
     password: "fake",
@@ -43,11 +36,19 @@ describe("CMCI - Get resource", () => {
   let error: any;
   let response: any;
   let endPoint: string;
+  let resourceParms: IResourceParms;
+
 
   describe("validation", () => {
     beforeEach(() => {
       response = undefined;
       error = undefined;
+      resourceParms = {
+        regionName: region,
+        name: resource,
+        criteria: undefined,
+        cicsPlex: undefined
+      };
     });
 
     it("should throw error if no parms are defined", async () => {
@@ -130,13 +131,19 @@ describe("CMCI - Get resource", () => {
     beforeEach(() => {
       response = undefined;
       error = undefined;
+      resourceParms = {
+        regionName: region,
+        name: resource,
+        criteria: undefined,
+        cicsPlex: undefined
+      };
       deleteSpy.mockClear();
       deleteSpy.mockResolvedValue(content);
     });
 
     it("should be able to get a resource without cicsPlex specified", async () => {
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" + resource +
-                "/" + region + "?CRITERIA=(" + encodeURIComponent(resourceParms.criteria) + ")";
+                "/" + region;
 
       response = await getResource(dummySession, resourceParms);
 
