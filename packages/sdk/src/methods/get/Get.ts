@@ -26,25 +26,32 @@ import { ICMCIApiResponse, IResourceParms } from "../../doc";
  */
 export async function getResource(session: AbstractSession, parms: IResourceParms): Promise<ICMCIApiResponse> {
   ImperativeExpect.toBeDefinedAndNonBlank(parms.name, "CICS Resource name", "CICS resource name is required");
-  ImperativeExpect.toBeDefinedAndNonBlank(parms.regionName, "CICS Region name", "CICS region name is required");
-
-  let delimiter = "?"; // initial delimiter
 
   Logger.getAppLogger().debug("Attempting to get resource(s) with the following parameters:\n%s", JSON.stringify(parms));
 
-  const cicsPlex = parms.cicsPlex == null ? "" : parms.cicsPlex + CicsCmciConstants.SEPERATOR;
-  const regionName = parms.regionName == null ? "" : parms.regionName;
+  const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName, parms.name, parms.criteria, parms.parameter);
 
-  let cmciResource = CicsCmciConstants.SEPERATOR + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + CicsCmciConstants.SEPERATOR +
-        parms.name + CicsCmciConstants.SEPERATOR + cicsPlex + regionName;
+  return CicsCmciRestClient.getExpectParsedXml(session, cmciResource, []);
+}
 
-  if (parms.criteria != null) {
-    cmciResource = cmciResource + delimiter + "CRITERIA=" + encodeURIComponent( "(" + parms.criteria  + ")");
+export function getResourceUri(cicsPlexName: string, regionName: string, resourceName: string, criteria: string, parameter: string) {
+  let delimiter = "?"; // initial delimiter
+
+  const cicsPlex = cicsPlexName == null ? "" : cicsPlexName + CicsCmciConstants.SEPERATOR;
+  const region = regionName == null ? "" : regionName;
+
+  let cmciResource = CicsCmciConstants.SEPERATOR + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT +
+                     CicsCmciConstants.SEPERATOR + resourceName + CicsCmciConstants.SEPERATOR +
+                     cicsPlex + region;
+
+  if (criteria != null) {
+    cmciResource = cmciResource + delimiter + "CRITERIA=" + encodeURIComponent( "(" + criteria  + ")");
     delimiter = "&";
   }
 
-  if (parms.parameter != null) {
-    cmciResource = cmciResource + delimiter + "PARAMETER=" + encodeURIComponent(parms.parameter);
+  if (parameter != null) {
+    cmciResource = cmciResource + delimiter + "PARAMETER=" + encodeURIComponent(parameter);
   }
-  return CicsCmciRestClient.getExpectParsedXml(session, cmciResource, []);
+
+  return cmciResource;
 }
