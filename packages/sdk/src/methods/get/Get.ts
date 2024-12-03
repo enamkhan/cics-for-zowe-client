@@ -11,8 +11,8 @@
 
 import { AbstractSession, ImperativeExpect, Logger } from "@zowe/imperative";
 import { CicsCmciRestClient } from "../../rest";
-import { CicsCmciConstants } from "../../constants";
 import { ICMCIApiResponse, IResourceParms } from "../../doc";
+import { getResourceUri } from "../common";
 
 /**
  * Get resources on in CICS through CMCI REST API
@@ -32,26 +32,4 @@ export async function getResource(session: AbstractSession, parms: IResourceParm
   const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName, parms.name, parms.criteria, parms.parameter);
 
   return CicsCmciRestClient.getExpectParsedXml(session, cmciResource, []);
-}
-
-export function getResourceUri(cicsPlexName: string, regionName: string, resourceName: string, criteria: string, parameter: string) {
-  let delimiter = "?"; // initial delimiter
-
-  const cicsPlex = cicsPlexName == null ? "" : cicsPlexName + CicsCmciConstants.SEPERATOR;
-  const region = regionName == null ? "" : regionName;
-
-  let cmciResource = CicsCmciConstants.SEPERATOR + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT +
-                     CicsCmciConstants.SEPERATOR + resourceName + CicsCmciConstants.SEPERATOR +
-                     cicsPlex + region;
-
-  if (criteria != null) {
-    cmciResource = cmciResource + delimiter + "CRITERIA=" + encodeURIComponent( "(" + criteria  + ")");
-    delimiter = "&";
-  }
-
-  if (parameter != null) {
-    cmciResource = cmciResource + delimiter + "PARAMETER=" + encodeURIComponent(parameter);
-  }
-
-  return cmciResource;
 }
