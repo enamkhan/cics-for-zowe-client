@@ -9,13 +9,12 @@
  *
  */
 
-import { TreeItemCollapsibleState, TreeItem, window } from "vscode";
-import { CICSRegionTree } from "../CICSRegionTree";
 import { getResource } from "@zowe/cics-for-zowe-sdk";
-import * as https from "https";
-import { getIconPathInResources } from "../../utils/profileUtils";
-import { CICSLibraryDatasets } from "./CICSLibraryDatasets";
+import { TreeItem, TreeItemCollapsibleState, window } from "vscode";
 import { toEscapedCriteriaString } from "../../utils/filterUtils";
+import { getIconPathInResources } from "../../utils/profileUtils";
+import { CICSRegionTree } from "../CICSRegionTree";
+import { CICSLibraryDatasets } from "./CICSLibraryDatasets";
 
 export class CICSLibraryTreeItem extends TreeItem {
   children: CICSLibraryDatasets[] = [];
@@ -58,7 +57,6 @@ export class CICSLibraryTreeItem extends TreeItem {
 
     this.children = [];
     try {
-      https.globalAgent.options.rejectUnauthorized = this.parentRegion.parentSession.session.ISession.rejectUnauthorized;
 
       const libraryResponse = await getResource(this.parentRegion.parentSession.session, {
         name: "cicslibrarydatasetname",
@@ -66,27 +64,23 @@ export class CICSLibraryTreeItem extends TreeItem {
         cicsPlex: this.parentRegion.parentPlex ? this.parentRegion.parentPlex.getPlexName() : undefined,
         criteria: criteria,
       });
-      https.globalAgent.options.rejectUnauthorized = undefined;
       const datasetArray = Array.isArray(libraryResponse.response.records.cicslibrarydatasetname)
         ? libraryResponse.response.records.cicslibrarydatasetname
         : [libraryResponse.response.records.cicslibrarydatasetname];
-      this.label = `${this.library.name}${this.parentRegion.parentPlex ? ` (${this.library.eyu_cicsname})` : ""}${
-        this.activeFilter ? ` (${this.activeFilter}) ` : " "
-      }[${datasetArray.length}]`;
+      this.label = `${this.library.name}${this.parentRegion.parentPlex ? ` (${this.library.eyu_cicsname})` : ""}${this.activeFilter ? ` (${this.activeFilter}) ` : " "
+        }[${datasetArray.length}]`;
       for (const dataset of datasetArray) {
         const newDatasetItem = new CICSLibraryDatasets(dataset, this.parentRegion, this); //this=CICSLibraryTreeItem
         this.addDataset(newDatasetItem);
       }
       this.iconPath = getIconPathInResources("folder-open-dark.svg", "folder-open-light.svg");
     } catch (error) {
-      https.globalAgent.options.rejectUnauthorized = undefined;
       if (error.mMessage!.includes("exceeded a resource limit")) {
         window.showErrorMessage(`Resource Limit Exceeded - Set a datasets filter to narrow search`);
       } else if (this.children.length === 0) {
         window.showInformationMessage(`No datasets found`);
-        this.label = `${this.library.name}${this.parentRegion.parentPlex ? ` (${this.library.eyu_cicsname})` : ""}${
-          this.activeFilter ? ` (${this.activeFilter}) ` : " "
-        }[0]`;
+        this.label = `${this.library.name}${this.parentRegion.parentPlex ? ` (${this.library.eyu_cicsname})` : ""}${this.activeFilter ? ` (${this.activeFilter}) ` : " "
+          }[0]`;
       } else {
         window.showErrorMessage(
           `Something went wrong when fetching datasets - ${JSON.stringify(error, Object.getOwnPropertyNames(error)).replace(

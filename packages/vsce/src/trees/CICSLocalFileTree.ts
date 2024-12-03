@@ -9,13 +9,12 @@
  *
  */
 
-import { TreeItemCollapsibleState, TreeItem, window, workspace } from "vscode";
-import { CICSLocalFileTreeItem } from "./treeItems/CICSLocalFileTreeItem";
 import { getResource } from "@zowe/cics-for-zowe-sdk";
-import { CICSRegionTree } from "./CICSRegionTree";
-import * as https from "https";
+import { TreeItem, TreeItemCollapsibleState, window, workspace } from "vscode";
 import { toEscapedCriteriaString } from "../utils/filterUtils";
 import { getIconPathInResources } from "../utils/profileUtils";
+import { CICSRegionTree } from "./CICSRegionTree";
+import { CICSLocalFileTreeItem } from "./treeItems/CICSLocalFileTreeItem";
 
 export class CICSLocalFileTree extends TreeItem {
   children: CICSLocalFileTreeItem[] = [];
@@ -46,7 +45,6 @@ export class CICSLocalFileTree extends TreeItem {
     }
     this.children = [];
     try {
-      https.globalAgent.options.rejectUnauthorized = this.parentRegion.parentSession.session.ISession.rejectUnauthorized;
 
       const localFileResponse = await getResource(this.parentRegion.parentSession.session, {
         name: "CICSLocalFile",
@@ -54,7 +52,6 @@ export class CICSLocalFileTree extends TreeItem {
         cicsPlex: this.parentRegion.parentPlex ? this.parentRegion.parentPlex.getPlexName() : undefined,
         criteria: criteria,
       });
-      https.globalAgent.options.rejectUnauthorized = undefined;
       const localFileArray = Array.isArray(localFileResponse.response.records.cicslocalfile)
         ? localFileResponse.response.records.cicslocalfile
         : [localFileResponse.response.records.cicslocalfile];
@@ -65,7 +62,6 @@ export class CICSLocalFileTree extends TreeItem {
       }
       this.iconPath = getIconPathInResources("folder-open-dark.svg", "folder-open-light.svg");
     } catch (error) {
-      https.globalAgent.options.rejectUnauthorized = undefined;
       // @ts-ignore
       if (error.mMessage!.includes("exceeded a resource limit")) {
         window.showErrorMessage(`Resource Limit Exceeded - Set a local file filter to narrow search`);

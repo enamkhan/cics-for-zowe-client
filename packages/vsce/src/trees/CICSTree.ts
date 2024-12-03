@@ -10,7 +10,9 @@
  */
 
 import { getResource } from "@zowe/cics-for-zowe-sdk";
+import { Gui, imperative } from "@zowe/zowe-explorer-api";
 import {
+  commands,
   Event,
   EventEmitter,
   ProgressLocation,
@@ -18,19 +20,16 @@ import {
   TreeDataProvider,
   TreeItem,
   WebviewPanel,
-  window,
-  commands
+  window
 } from "vscode";
 import { PersistentStorage } from "../utils/PersistentStorage";
 import { InfoLoaded, ProfileManagement } from "../utils/profileManagement";
-import { isTheia, openConfigFile } from "../utils/workspaceUtils";
+import { getIconPathInResources, missingSessionParameters, promptCredentials } from "../utils/profileUtils";
 import { addProfileHtml } from "../utils/webviewHTML";
+import { isTheia, openConfigFile } from "../utils/workspaceUtils";
 import { CICSPlexTree } from "./CICSPlexTree";
 import { CICSRegionTree } from "./CICSRegionTree";
 import { CICSSessionTree } from "./CICSSessionTree";
-import * as https from "https";
-import { getIconPathInResources, missingSessionParameters, promptCredentials } from "../utils/profileUtils";
-import { Gui, imperative } from "@zowe/zowe-explorer-api";
 
 export class CICSTree implements TreeDataProvider<CICSSessionTree> {
   loadedProfiles: CICSSessionTree[] = [];
@@ -229,15 +228,12 @@ export class CICSTree implements TreeDataProvider<CICSSessionTree> {
                 protocol: profile.profile.protocol,
               });
               try {
-                https.globalAgent.options.rejectUnauthorized = profile.profile.rejectUnauthorized;
-
                 const regionsObtained = await getResource(session, {
                   name: "CICSRegion",
                   regionName: item.regions[0].applid,
                 });
                 // 200 OK received
                 newSessionTree.setAuthorized();
-                https.globalAgent.options.rejectUnauthorized = undefined;
                 const newRegionTree = new CICSRegionTree(
                   item.regions[0].applid,
                   regionsObtained.response.records.cicsregion,
@@ -247,7 +243,6 @@ export class CICSTree implements TreeDataProvider<CICSSessionTree> {
                 );
                 newSessionTree.addRegion(newRegionTree);
               } catch (error) {
-                https.globalAgent.options.rejectUnauthorized = undefined;
                 console.log(error);
               }
             } else {
@@ -274,7 +269,6 @@ export class CICSTree implements TreeDataProvider<CICSSessionTree> {
           }
           this._onDidChangeTreeData.fire(undefined);
         } catch (error) {
-          https.globalAgent.options.rejectUnauthorized = undefined;
           // Change session tree icon to disconnected upon error
           newSessionTree = new CICSSessionTree(profile, getIconPathInResources("profile-disconnected-dark.svg", "profile-disconnected-light.svg"));
           // If method was called when expanding profile

@@ -9,13 +9,12 @@
  *
  */
 
-import { TreeItemCollapsibleState, TreeItem, window } from "vscode";
-import { CICSTransactionTreeItem } from "./treeItems/CICSTransactionTreeItem";
-import { CICSRegionTree } from "./CICSRegionTree";
 import { getResource } from "@zowe/cics-for-zowe-sdk";
-import * as https from "https";
+import { TreeItem, TreeItemCollapsibleState, window } from "vscode";
 import { getDefaultTransactionFilter, toEscapedCriteriaString } from "../utils/filterUtils";
 import { getIconPathInResources } from "../utils/profileUtils";
+import { CICSRegionTree } from "./CICSRegionTree";
+import { CICSTransactionTreeItem } from "./treeItems/CICSTransactionTreeItem";
 
 export class CICSTransactionTree extends TreeItem {
   children: CICSTransactionTreeItem[] = [];
@@ -42,7 +41,6 @@ export class CICSTransactionTree extends TreeItem {
     }
     this.children = [];
     try {
-      https.globalAgent.options.rejectUnauthorized = this.parentRegion.parentSession.session.ISession.rejectUnauthorized;
 
       const transactionResponse = await getResource(this.parentRegion.parentSession.session, {
         name: "CICSLocalTransaction",
@@ -50,7 +48,6 @@ export class CICSTransactionTree extends TreeItem {
         cicsPlex: this.parentRegion.parentPlex ? this.parentRegion.parentPlex.getPlexName() : undefined,
         criteria: criteria,
       });
-      https.globalAgent.options.rejectUnauthorized = undefined;
       const transactionArray = Array.isArray(transactionResponse.response.records.cicslocaltransaction)
         ? transactionResponse.response.records.cicslocaltransaction
         : [transactionResponse.response.records.cicslocaltransaction];
@@ -61,7 +58,6 @@ export class CICSTransactionTree extends TreeItem {
       }
       this.iconPath = getIconPathInResources("folder-open-dark.svg", "folder-open-light.svg");
     } catch (error) {
-      https.globalAgent.options.rejectUnauthorized = undefined;
       // @ts-ignore
       if (error.mMessage!.includes("exceeded a resource limit")) {
         window.showErrorMessage(`Resource Limit Exceeded - Set a transaction filter to narrow search`);

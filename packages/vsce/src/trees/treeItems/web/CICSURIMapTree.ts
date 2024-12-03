@@ -9,13 +9,12 @@
  *
  */
 
-import { TreeItemCollapsibleState, TreeItem, window } from "vscode";
-import { CICSURIMapTreeItem } from "./treeItems/CICSURIMapTreeItem";
-import { CICSRegionTree } from "../../CICSRegionTree";
 import { getResource } from "@zowe/cics-for-zowe-sdk";
-import * as https from "https";
+import { TreeItem, TreeItemCollapsibleState, window } from "vscode";
 import { toEscapedCriteriaString } from "../../../utils/filterUtils";
 import { getIconPathInResources } from "../../../utils/profileUtils";
+import { CICSRegionTree } from "../../CICSRegionTree";
+import { CICSURIMapTreeItem } from "./treeItems/CICSURIMapTreeItem";
 export class CICSURIMapTree extends TreeItem {
   children: CICSURIMapTreeItem[] = [];
   parentRegion: CICSRegionTree;
@@ -41,7 +40,6 @@ export class CICSURIMapTree extends TreeItem {
     }
     this.children = [];
     try {
-      https.globalAgent.options.rejectUnauthorized = this.parentRegion.parentSession.session.ISession.rejectUnauthorized;
 
       const urimapResponse = await getResource(this.parentRegion.parentSession.session, {
         name: "CICSURIMap",
@@ -49,7 +47,6 @@ export class CICSURIMapTree extends TreeItem {
         cicsPlex: this.parentRegion.parentPlex ? this.parentRegion.parentPlex.getPlexName() : undefined,
         criteria: criteria,
       });
-      https.globalAgent.options.rejectUnauthorized = undefined;
       const urimapArray = Array.isArray(urimapResponse.response.records.cicsurimap)
         ? urimapResponse.response.records.cicsurimap
         : [urimapResponse.response.records.cicsurimap];
@@ -63,7 +60,6 @@ export class CICSURIMapTree extends TreeItem {
       }
       this.iconPath = getIconPathInResources("folder-open-dark.svg", "folder-open-light.svg");
     } catch (error) {
-      https.globalAgent.options.rejectUnauthorized = undefined;
       if (error.mMessage!.includes("exceeded a resource limit")) {
         window.showErrorMessage(`Resource Limit Exceeded - Set a URIMap filter to narrow search`);
       } else if (this.children.length === 0) {
