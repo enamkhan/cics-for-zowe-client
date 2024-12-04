@@ -34,7 +34,7 @@ export async function deleteProgram(session: AbstractSession, parms: IProgramPar
 
   const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
                                       CicsCmciConstants.CICS_DEFINITION_PROGRAM,
-                                      `NAME==${parms.name}`,
+                                      `NAME=${parms.name}`,
                                       `CSDGROUP(${parms.csdGroup})`);
 
   return CicsCmciRestClient.deleteExpectParsedXml(session, cmciResource, []);
@@ -59,7 +59,7 @@ export async function deleteTransaction(session: AbstractSession, parms: ITransa
 
   const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
                                       CicsCmciConstants.CICS_DEFINITION_TRANSACTION,
-                                      `NAME==${parms.name}`,
+                                      `NAME=${parms.name}`,
                                       `CSDGROUP(${parms.csdGroup})`);
 
   return CicsCmciRestClient.deleteExpectParsedXml(session, cmciResource, []);
@@ -85,7 +85,7 @@ export async function deleteUrimap(session: AbstractSession, parms: IURIMapParms
 
   const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
                                       CicsCmciConstants.CICS_DEFINITION_URIMAP,
-                                      `NAME==${parms.name}`,
+                                      `NAME=${parms.name}`,
                                       `CSDGROUP(${parms.csdGroup})`);
 
   return CicsCmciRestClient.deleteExpectParsedXml(session, cmciResource, []);
@@ -111,7 +111,7 @@ export async function deleteWebservice(session: AbstractSession, parms: IWebServ
 
   const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
                                       CicsCmciConstants.CICS_DEFINITION_WEBSERVICE,
-                                      `NAME==${parms.name}`,
+                                      `NAME=${parms.name}`,
                                       `CSDGROUP(${parms.csdGroup})`);
 
   return CicsCmciRestClient.deleteExpectParsedXml(session, cmciResource, []);

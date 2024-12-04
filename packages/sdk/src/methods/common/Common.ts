@@ -32,7 +32,7 @@ export function getResourceUri(cicsPlexName: string, regionName: string, resourc
 
   if (criteria != null) {
     let addParentheses = criteria.charAt(0) !== '(';
-    console.log(addParentheses);
+
     cmciResource = cmciResource + delimiter + "CRITERIA=" + (addParentheses ? "(": "") + encodeURIComponent(criteria) + (addParentheses ? ")": "") ;
     delimiter = "&";
   }
