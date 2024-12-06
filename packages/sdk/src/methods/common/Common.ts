@@ -9,6 +9,7 @@
  *
  */
 
+import { ImperativeExpect } from "@zowe/imperative";
 import { CicsCmciConstants } from "../../constants";
 
 /**
@@ -21,6 +22,8 @@ import { CicsCmciConstants } from "../../constants";
  * @returns {string} return a string containing the resource uri
  */
 export function getResourceUri(cicsPlexName: string, regionName: string, resourceName: string, criteria?: string, parameter?: string) {
+  ImperativeExpect.toBeDefinedAndNonBlank(resourceName, "CICS Resource name", "CICS resource name is required");
+
   let delimiter = "?"; // initial delimiter
 
   const cicsPlex = cicsPlexName == null ? "" : cicsPlexName + CicsCmciConstants.SEPERATOR;
@@ -30,14 +33,14 @@ export function getResourceUri(cicsPlexName: string, regionName: string, resourc
                      CicsCmciConstants.SEPERATOR + resourceName + CicsCmciConstants.SEPERATOR +
                      cicsPlex + region;
 
-  if (criteria != null) {
+  if (criteria != null && criteria.length > 0) {
     let addParentheses = criteria.charAt(0) !== '(';
 
     cmciResource = cmciResource + delimiter + "CRITERIA=" + (addParentheses ? "(": "") + encodeURIComponent(criteria) + (addParentheses ? ")": "") ;
     delimiter = "&";
   }
 
-  if (parameter != null) {
+  if (parameter != null && parameter.length > 0) {
     cmciResource = cmciResource + delimiter + "PARAMETER=" + encodeURIComponent(parameter);
   }
 

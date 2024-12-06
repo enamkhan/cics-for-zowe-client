@@ -51,7 +51,7 @@ export function defineProgram(session: AbstractSession, parms: IProgramParms): P
   };
 
   const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
-     CicsCmciConstants.CICS_DEFINITION_PROGRAM, undefined, undefined );
+     CicsCmciConstants.CICS_DEFINITION_PROGRAM);
   return CicsCmciRestClient.postExpectParsedXml(session, cmciResource, [], requestBody) as any;
 }
 
