@@ -31,9 +31,12 @@ export async function discardProgram(session: AbstractSession, parms: IProgramPa
 
   Logger.getAppLogger().debug("Attempting to discard a program with the following parameters:\n%s", JSON.stringify(parms));
 
-  const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
-                                      CicsCmciConstants.CICS_PROGRAM_RESOURCE,
-                                      `PROGRAM=${parms.name}`);
+  const cmciResource = getResourceUri({
+    cicsPlex: parms.cicsPlex,
+    regionName: parms.regionName,
+    name: CicsCmciConstants.CICS_PROGRAM_RESOURCE,
+    criteria: `PROGRAM=${parms.name}`,
+  });
 
   return CicsCmciRestClient.deleteExpectParsedXml(session, cmciResource, []);
 }
@@ -54,9 +57,12 @@ export async function discardTransaction(session: AbstractSession, parms: ITrans
 
   Logger.getAppLogger().debug("Attempting to discard a transaction with the following parameters:\n%s", JSON.stringify(parms));
 
-  const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
-                                      CicsCmciConstants.CICS_LOCAL_TRANSACTION,
-                                      `(TRANID=${parms.name})`);
+  const cmciResource = getResourceUri({
+    cicsPlex: parms.cicsPlex,
+    regionName: parms.regionName,
+    name: CicsCmciConstants.CICS_LOCAL_TRANSACTION,
+    criteria: `(TRANID=${parms.name})`,
+  });
 
   return CicsCmciRestClient.deleteExpectParsedXml(session, cmciResource, []);
 }
@@ -67,9 +73,12 @@ export async function discardUrimap(session: AbstractSession, parms: IURIMapParm
 
   Logger.getAppLogger().debug("Attempting to discard a URIMap with the following parameters:\n%s", JSON.stringify(parms));
 
-  const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
-                                      CicsCmciConstants.CICS_URIMAP,
-                                      `(NAME=${parms.name})`);
+  const cmciResource = getResourceUri({
+    cicsPlex: parms.cicsPlex,
+    regionName: parms.regionName,
+    name: CicsCmciConstants.CICS_URIMAP,
+    criteria: `(NAME=${parms.name})`,
+  });
 
   return CicsCmciRestClient.deleteExpectParsedXml(session, cmciResource, []);
 }

@@ -33,9 +33,12 @@ export async function enableUrimap(session: AbstractSession, parms: IURIMapParms
 
   Logger.getAppLogger().debug("Attempting to enable a URIMap with the following parameters:\n%s", JSON.stringify(parms));
 
-  const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
-                                      CicsCmciConstants.CICS_URIMAP,
-                                      `NAME=${parms.name}`);
+  const cmciResource = getResourceUri({
+    cicsPlex: parms.cicsPlex,
+    regionName: parms.regionName,
+    name: CicsCmciConstants.CICS_URIMAP,
+    criteria: `NAME=${parms.name}`,
+  });
 
   const requestBody: any = {
     request: {

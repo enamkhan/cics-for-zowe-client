@@ -11,6 +11,7 @@
 
 import { ImperativeExpect } from "@zowe/imperative";
 import { CicsCmciConstants } from "../../constants";
+import { IResourceParms } from "../../doc";
 
 /**
  * Get uri for requesting a resources in CICS through CMCI REST API
@@ -21,29 +22,38 @@ import { CicsCmciConstants } from "../../constants";
  * @param {string} parameter - parameter string
  * @returns {string} return a string containing the resource uri
  */
-export function getResourceUri(cicsPlexName: string, regionName: string, resourceName: string, criteria?: string, parameter?: string) {
-  ImperativeExpect.toBeDefinedAndNonBlank(resourceName, "CICS Resource name", "CICS resource name is required");
+export function getResourceUri(params: IResourceParms): string {
+  ImperativeExpect.toBeDefinedAndNonBlank(params.name, "CICS Resource name", "CICS resource name is required");
 
   let delimiter = "?"; // initial delimiter
 
-  const cicsPlex = cicsPlexName == null ? "" : cicsPlexName + CicsCmciConstants.SEPERATOR;
-  const region = regionName == null ? "" : regionName;
+  const cicsPlex = params.cicsPlex ? CicsCmciConstants.SEPERATOR + params.cicsPlex : "";
+  const region = params.regionName ? CicsCmciConstants.SEPERATOR + params.regionName : "";
 
   let cmciResource = CicsCmciConstants.SEPERATOR + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT +
-                     CicsCmciConstants.SEPERATOR + resourceName + CicsCmciConstants.SEPERATOR +
-                     cicsPlex + region;
+    CicsCmciConstants.SEPERATOR + params.name + cicsPlex + region;
 
-  if (criteria != null && criteria.length > 0) {
-    let addParentheses = criteria.charAt(0) !== '(';
+  if (params.criteria && params.criteria.length > 0) {
+    let addParentheses = params.criteria.charAt(0) !== '(';
 
-    cmciResource = cmciResource + delimiter + "CRITERIA=" + (addParentheses ? "(": "") + encodeURIComponent(criteria) + (addParentheses ? ")": "") ;
+    cmciResource += delimiter + "CRITERIA=" + (addParentheses ? "(" : "") + encodeURIComponent(params.criteria) + (addParentheses ? ")" : "");
     delimiter = "&";
   }
 
-  if (parameter != null && parameter.length > 0) {
-    cmciResource = cmciResource + delimiter + "PARAMETER=" + encodeURIComponent(parameter);
+  if (params.parameter && params.parameter.length > 0) {
+    cmciResource += delimiter + "PARAMETER=" + encodeURIComponent(params.parameter);
+    delimiter = "&";
+  }
+
+  if (params.queryParams && params.queryParams.summonly) {
+    cmciResource += delimiter + "SUMMONLY";
+    delimiter = "&";
+  }
+
+  if (params.queryParams && params.queryParams.nodiscard) {
+    cmciResource += delimiter + "NODISCARD";
+    delimiter = "&";
   }
 
   return cmciResource;
 }
-

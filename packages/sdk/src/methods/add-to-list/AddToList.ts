@@ -32,8 +32,12 @@ export function addCSDGroupToList(session: AbstractSession, parms: ICSDGroupParm
 
   Logger.getAppLogger().debug("Attempting to add a CSD Group to a CSD List with the following parameters:\n%s", JSON.stringify(parms));
 
-  const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
-        CicsCmciConstants.CICS_CSDGROUP, "NAME=='" + parms.name + "'");
+  const cmciResource = getResourceUri({
+    cicsPlex: parms.cicsPlex,
+    regionName: parms.regionName,
+    name: CicsCmciConstants.CICS_CSDGROUP,
+    criteria: "NAME=='" + parms.name + "'"
+  });
 
   const requestBody: any = {
     request: {

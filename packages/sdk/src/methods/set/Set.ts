@@ -10,10 +10,10 @@
  */
 
 import { AbstractSession, ImperativeExpect, Logger } from "@zowe/imperative";
-import { CicsCmciRestClient } from "../../rest";
 import { CicsCmciConstants } from "../../constants";
-import { getResourceUri } from "../common";
 import { ICMCIApiResponse, IProgramParms } from "../../doc";
+import { CicsCmciRestClient } from "../../rest";
+import { getResourceUri } from "../common";
 
 /**
  * Refresh a program definition on CICS through CMCI REST API
@@ -40,9 +40,12 @@ export function programNewcopy(session: AbstractSession, parms: IProgramParms): 
     }
   };
 
-  const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
-                                      CicsCmciConstants.CICS_PROGRAM_RESOURCE,
-                                      `PROGRAM=${parms.name}`);
+  const cmciResource = getResourceUri({
+    cicsPlex: parms.cicsPlex,
+    regionName: parms.regionName,
+    name: CicsCmciConstants.CICS_PROGRAM_RESOURCE,
+    criteria: `PROGRAM=${parms.name}`,
+  });
 
   return CicsCmciRestClient.putExpectParsedXml(session, cmciResource, [], requestBody) as any;
 }

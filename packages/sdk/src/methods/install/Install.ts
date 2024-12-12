@@ -42,10 +42,13 @@ export function installProgram(session: AbstractSession, parms: IProgramParms): 
     }
   };
 
-  const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
-                                      CicsCmciConstants.CICS_DEFINITION_PROGRAM,
-                                      `NAME=${parms.name}`,
-                                      `CSDGROUP(${parms.csdGroup})`);
+  const cmciResource = getResourceUri({
+    cicsPlex: parms.cicsPlex,
+    regionName: parms.regionName,
+    name: CicsCmciConstants.CICS_DEFINITION_PROGRAM,
+    criteria: `NAME=${parms.name}`,
+    parameter: `CSDGROUP(${parms.csdGroup})`,
+  });
 
   return CicsCmciRestClient.putExpectParsedXml(session, cmciResource, [], requestBody) as any;
 }
@@ -77,10 +80,13 @@ export function installTransaction(session: AbstractSession, parms: IProgramParm
     }
   };
 
-  const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
-                      CicsCmciConstants.CICS_DEFINITION_TRANSACTION,
-                      `NAME=${parms.name}`,
-                      `CSDGROUP(${parms.csdGroup})`);
+  const cmciResource = getResourceUri({
+    cicsPlex: parms.cicsPlex,
+    regionName: parms.regionName,
+    name: CicsCmciConstants.CICS_DEFINITION_TRANSACTION,
+    criteria: `NAME=${parms.name}`,
+    parameter: `CSDGROUP(${parms.csdGroup})`,
+  });
 
   return CicsCmciRestClient.putExpectParsedXml(session, cmciResource,
     [], requestBody) as any;
@@ -105,10 +111,13 @@ export function installUrimap(session: AbstractSession, parms: IURIMapParms): Pr
 
   Logger.getAppLogger().debug("Attempting to install a URIMap with the following parameters:\n%s", JSON.stringify(parms));
 
-  const cmciResource = getResourceUri(parms.cicsPlex, parms.regionName,
-                                      CicsCmciConstants.CICS_DEFINITION_URIMAP,
-                                      `NAME=${parms.name}`,
-                                      `CSDGROUP(${parms.csdGroup})`);
+  const cmciResource = getResourceUri({
+    cicsPlex: parms.cicsPlex,
+    regionName: parms.regionName,
+    name: CicsCmciConstants.CICS_DEFINITION_URIMAP,
+    criteria: `NAME=${parms.name}`,
+    parameter: `CSDGROUP(${parms.csdGroup})`,
+  });
 
   const requestBody: any = {
     request: {

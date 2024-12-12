@@ -43,4 +43,20 @@ export interface IResourceParms {
      * CICS Plex of the program
      */
   cicsPlex?: string;
+
+  /**
+   *  Query parameters to be used in the HTTP request
+   */
+  queryParams?: IResourceQueryParams;
+}
+
+export interface IResourceQueryParams {
+  /**
+   * Include SUMMONLY query parameter
+   */
+  summonly?: boolean;
+  /**
+   * Include NODISCARD query parameter
+   */
+  nodiscard?: boolean;
 }
