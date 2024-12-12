@@ -162,7 +162,7 @@ describe("CMCI - Remove csdGroup from list", () => {
     it("should be able to remove a csdGroup from list with cicsPlex specified but empty string", async () => {
       removeFromListParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-            CicsCmciConstants.CICS_CSDGROUP_IN_LIST + "/" + removeFromListParms.cicsPlex + "/" + removeFromListParms.regionName +
+            CicsCmciConstants.CICS_CSDGROUP_IN_LIST + "/" + removeFromListParms.regionName +
             "?CRITERIA=(CSDLIST%3D%3D'" + removeFromListParms.csdList + "')%20AND%20(CSDGROUP%3D%3D'" + removeFromListParms.name + "')";
 
       response = await removeCSDGroupFromList(dummySession, removeFromListParms);

@@ -120,7 +120,7 @@ describe("CMCI - Get resource", () => {
       }
 
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-       resource + "/";
+       resource;
 
       expect(response).toContain(content);
       expect(deleteSpy).toHaveBeenCalledWith(dummySession, endPoint, []);
@@ -135,7 +135,7 @@ describe("CMCI - Get resource", () => {
       }
 
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-       resource + "/";
+       resource;
 
       expect(response).toContain(content);
       expect(deleteSpy).toHaveBeenCalledWith(dummySession, endPoint, []);

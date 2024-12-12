@@ -192,7 +192,7 @@ describe("CMCI - Install transaction", () => {
     it("should be able to install a transaction with cicsPlex specified but empty string", async () => {
       installParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-                CicsCmciConstants.CICS_DEFINITION_TRANSACTION + "//" + region +
+                CicsCmciConstants.CICS_DEFINITION_TRANSACTION + "/" + region +
                 "?CRITERIA=(NAME%3D" + installParms.name + ")&PARAMETER=CSDGROUP(" + installParms.csdGroup + ")";
 
       response = await installTransaction(dummySession, installParms);

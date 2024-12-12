@@ -398,7 +398,7 @@ describe("CMCI - Define pipeline URIMap", () => {
     it("should be able to define a URIMap with cicsPlex specified but empty string", async () => {
       defineParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-                CicsCmciConstants.CICS_DEFINITION_URIMAP + "//" + region;
+                CicsCmciConstants.CICS_DEFINITION_URIMAP + "/" + region;
 
       response = await defineUrimapPipeline(dummySession, defineParms);
 

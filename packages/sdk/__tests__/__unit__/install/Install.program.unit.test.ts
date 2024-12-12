@@ -189,7 +189,7 @@ describe("CMCI - Install program", () => {
     it("should be able to install a program with cicsPlex specified but empty string", async () => {
       installParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-                CicsCmciConstants.CICS_DEFINITION_PROGRAM + "//" + region +
+                CicsCmciConstants.CICS_DEFINITION_PROGRAM + "/" + region +
                 "?CRITERIA=(NAME%3D" + installParms.name + ")&PARAMETER=CSDGROUP(" + installParms.csdGroup + ")";
 
       response = await installProgram(dummySession, installParms);

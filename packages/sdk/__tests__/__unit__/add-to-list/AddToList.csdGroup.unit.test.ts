@@ -178,7 +178,7 @@ describe("CMCI - Add csdGroup to list", () => {
     it("should be able to add a csdGroup to list with cicsPlex specified but empty string", async () => {
       addToListParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-            CicsCmciConstants.CICS_CSDGROUP + "/" + addToListParms.cicsPlex + "/" + addToListParms.regionName +
+            CicsCmciConstants.CICS_CSDGROUP + "/" + addToListParms.regionName +
             "?CRITERIA=(NAME%3D%3D'" + addToListParms.name + "')";
 
       response = await addCSDGroupToList(dummySession, addToListParms);

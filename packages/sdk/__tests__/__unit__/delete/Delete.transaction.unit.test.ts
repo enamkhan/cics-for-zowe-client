@@ -191,7 +191,7 @@ describe("CMCI - Discard transaction", () => {
     it("should be able to delete a transaction with cicsPlex specified but empty string", async () => {
       deleteParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-                CicsCmciConstants.CICS_DEFINITION_TRANSACTION + "//" + region +
+                CicsCmciConstants.CICS_DEFINITION_TRANSACTION + "/" + region +
                 `?CRITERIA=(NAME%3D${deleteParms.name})&PARAMETER=CSDGROUP(${deleteParms.csdGroup})`;
 
       response = await deleteTransaction(dummySession, deleteParms);

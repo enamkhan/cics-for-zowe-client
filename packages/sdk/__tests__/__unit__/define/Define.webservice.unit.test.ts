@@ -317,7 +317,7 @@ describe("CMCI - Define web service", () => {
     it("should be able to define a web service with cicsPlex specified but empty string", async () => {
       defineParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-                CicsCmciConstants.CICS_DEFINITION_WEBSERVICE + "//" + region;
+                CicsCmciConstants.CICS_DEFINITION_WEBSERVICE + "/" + region;
 
       response = await defineWebservice(dummySession, defineParms);
 

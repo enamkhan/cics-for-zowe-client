@@ -396,7 +396,7 @@ describe("CMCI - Define server URIMap", () => {
     it("should be able to define a URIMap with cicsPlex specified but empty string", async () => {
       defineParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-                CicsCmciConstants.CICS_DEFINITION_URIMAP + "//" + region;
+                CicsCmciConstants.CICS_DEFINITION_URIMAP + "/" + region;
 
       response = await defineUrimapServer(dummySession, defineParms);
 

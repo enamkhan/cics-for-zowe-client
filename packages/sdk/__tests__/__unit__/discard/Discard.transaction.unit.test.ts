@@ -159,7 +159,7 @@ describe("CMCI - Discard transaction", () => {
     it("should be able to discard a transaction with cicsPlex specified but empty string", async () => {
       discardParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-                CicsCmciConstants.CICS_LOCAL_TRANSACTION + "//" + region +
+                CicsCmciConstants.CICS_LOCAL_TRANSACTION + "/" + region +
                 "?CRITERIA=(TRANID%3D" + discardParms.name + ")";
 
       response = await discardTransaction(dummySession, discardParms);

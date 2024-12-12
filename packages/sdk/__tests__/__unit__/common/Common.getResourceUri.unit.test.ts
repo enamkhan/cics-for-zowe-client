@@ -25,7 +25,7 @@ describe("getResourceUri", () => {
 
     it("should throw error if resourceName is empty", async () => {
       try {
-        response = getResourceUri("", "", "");
+        response = getResourceUri({ name: "" });
       } catch (err) {
         error = err;
       }
@@ -37,7 +37,7 @@ describe("getResourceUri", () => {
 
     it("should throw error if resourceName is undefined", async () => {
       try {
-        response = getResourceUri("", "", undefined);
+        response = getResourceUri({ name: undefined });
       } catch (err) {
         error = err;
       }
@@ -49,7 +49,7 @@ describe("getResourceUri", () => {
 
     it("should throw error if resourceName is null", async () => {
       try {
-        response = getResourceUri("", "", null);
+        response = getResourceUri({ name: null });
       } catch (err) {
         error = err;
       }
@@ -69,43 +69,43 @@ describe("getResourceUri", () => {
 
     it("should be able to get a resource uri with only the resource name specified", async () => {
       try {
-        response = getResourceUri("", "", "resource1");
+        response = getResourceUri({ name: "resource1" });
       } catch (err) {
         error = err;
       }
 
       expect(response).toBeDefined();
       expect(error).toBeUndefined();
-      expect(response).toEqual("/CICSSystemManagement/resource1//");
+      expect(response).toEqual("/CICSSystemManagement/resource1");
     });
 
     it("should be able to get a resource uri with the cicsplex and resource name specified", async () => {
       try {
-        response = getResourceUri("cicsplex1", "", "resource1");
+        response = getResourceUri({ name: "resource1", cicsPlex: "cicsplex1" });
       } catch (err) {
         error = err;
       }
 
       expect(response).toBeDefined();
       expect(error).toBeUndefined();
-      expect(response).toEqual("/CICSSystemManagement/resource1/cicsplex1/");
+      expect(response).toEqual("/CICSSystemManagement/resource1/cicsplex1");
     });
 
     it("should be able to get a resource uri with the region and resource names specified", async () => {
       try {
-        response = getResourceUri("", "region1", "resource1");
+        response = getResourceUri({ name: "resource1", regionName: "region1" });
       } catch (err) {
         error = err;
       }
 
       expect(response).toBeDefined();
       expect(error).toBeUndefined();
-      expect(response).toEqual("/CICSSystemManagement/resource1//region1");
+      expect(response).toEqual("/CICSSystemManagement/resource1/region1");
     });
 
     it("should be able to get a resource uri with the plex, region and resource names specified", async () => {
       try {
-        response = getResourceUri("cicsplex1", "region1", "resource1");
+        response = getResourceUri({ cicsPlex: "cicsplex1", regionName: "region1", name: "resource1" });
       } catch (err) {
         error = err;
       }
@@ -117,7 +117,7 @@ describe("getResourceUri", () => {
 
     it("should be able to get a resource uri with the criteria is unspecified", async () => {
       try {
-        response = getResourceUri("cicsplex1", "region1", "resource1", "");
+        response = getResourceUri({ cicsPlex: "cicsplex1", regionName: "region1", name: "resource1", criteria: "" });
       } catch (err) {
         error = err;
       }
@@ -129,7 +129,7 @@ describe("getResourceUri", () => {
 
     it("should be able to get a resource uri with the criteria is specified", async () => {
       try {
-        response = getResourceUri("cicsplex1", "region1", "resource1", "NAME=test");
+        response = getResourceUri({ cicsPlex: "cicsplex1", regionName: "region1", name: "resource1", criteria: "NAME=test" });
       } catch (err) {
         error = err;
       }
@@ -141,7 +141,7 @@ describe("getResourceUri", () => {
 
     it("should be able to get a resource uri with the parameter is unspecified", async () => {
       try {
-        response = getResourceUri("cicsplex1", "region1", "resource1", "", "");
+        response = getResourceUri({ cicsPlex: "cicsplex1", regionName: "region1", name: "resource1", parameter: "" });
       } catch (err) {
         error = err;
       }
@@ -153,7 +153,7 @@ describe("getResourceUri", () => {
 
     it("should be able to get a resource uri with the parameter is specified", async () => {
       try {
-        response = getResourceUri("cicsplex1", "region1", "resource1", "", "PARAM=test");
+        response = getResourceUri({ cicsPlex: "cicsplex1", regionName: "region1", name: "resource1", parameter: "PARAM=test" });
       } catch (err) {
         error = err;
       }
@@ -165,7 +165,7 @@ describe("getResourceUri", () => {
 
     it("should be able to get a resource uri when both criteria and parameter are specified", async () => {
       try {
-        response = getResourceUri("cicsplex1", "region1", "resource1", "NAME=test1", "PARAM=test2");
+        response = getResourceUri({ cicsPlex: "cicsplex1", regionName: "region1", name: "resource1", criteria: "NAME=test1", parameter: "PARAM=test2" });
       } catch (err) {
         error = err;
       }
@@ -173,6 +173,66 @@ describe("getResourceUri", () => {
       expect(response).toBeDefined();
       expect(error).toBeUndefined();
       expect(response).toEqual("/CICSSystemManagement/resource1/cicsplex1/region1?CRITERIA=(NAME%3Dtest1)&PARAMETER=PARAM%3Dtest2");
+    });
+
+    it("should be able to get a resource uri when summonly query parameter is set", async () => {
+      try {
+        response = getResourceUri({ name: "resource1", queryParams: { summonly: true } });
+      } catch (err) {
+        error = err;
+      }
+
+      expect(response).toBeDefined();
+      expect(error).toBeUndefined();
+      expect(response).toEqual("/CICSSystemManagement/resource1?SUMMONLY");
+    });
+
+    it("should be able to get a resource uri when nodiscard query parameter is set", async () => {
+      try {
+        response = getResourceUri({ name: "resource1", queryParams: { nodiscard: true } });
+      } catch (err) {
+        error = err;
+      }
+
+      expect(response).toBeDefined();
+      expect(error).toBeUndefined();
+      expect(response).toEqual("/CICSSystemManagement/resource1?NODISCARD");
+    });
+
+    it("should be able to get a resource uri with context when nodiscard query parameter is set", async () => {
+      try {
+        response = getResourceUri({ name: "resource1", cicsPlex: "plex1", regionName: "reg1", queryParams: { nodiscard: true } });
+      } catch (err) {
+        error = err;
+      }
+
+      expect(response).toBeDefined();
+      expect(error).toBeUndefined();
+      expect(response).toEqual("/CICSSystemManagement/resource1/plex1/reg1?NODISCARD");
+    });
+
+    it("should be able to get a resource uri with context, criteria and parameters when nodiscard query parameter is set", async () => {
+      try {
+        response = getResourceUri({ name: "resource1", cicsPlex: "plex1", regionName: "reg1", criteria: "PROGRAM=ABC", parameter: "PARAM=TEST", queryParams: { nodiscard: true } });
+      } catch (err) {
+        error = err;
+      }
+
+      expect(response).toBeDefined();
+      expect(error).toBeUndefined();
+      expect(response).toEqual("/CICSSystemManagement/resource1/plex1/reg1?CRITERIA=(PROGRAM%3DABC)&PARAMETER=PARAM%3DTEST&NODISCARD");
+    });
+
+    it("should be able to get a resource uri with all parameters", async () => {
+      try {
+        response = getResourceUri({ name: "resource1", cicsPlex: "plex1", regionName: "reg1", criteria: "PROGRAM=ABC", parameter: "PARAM=TEST", queryParams: { nodiscard: true, summonly: true } });
+      } catch (err) {
+        error = err;
+      }
+
+      expect(response).toBeDefined();
+      expect(error).toBeUndefined();
+      expect(response).toEqual("/CICSSystemManagement/resource1/plex1/reg1?CRITERIA=(PROGRAM%3DABC)&PARAMETER=PARAM%3DTEST&SUMMONLY&NODISCARD");
     });
   });
 });

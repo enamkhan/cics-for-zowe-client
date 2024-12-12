@@ -185,7 +185,7 @@ describe("CMCI - Delete program", () => {
     it("should be able to delete a program with cicsPlex specified but empty string", async () => {
       deleteParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-                CicsCmciConstants.CICS_DEFINITION_PROGRAM + "//" + region +
+                CicsCmciConstants.CICS_DEFINITION_PROGRAM + "/" + region +
                 `?CRITERIA=(NAME%3D${deleteParms.name})&PARAMETER=CSDGROUP(${deleteParms.csdGroup})`;
 
       response = await deleteProgram(dummySession, deleteParms);

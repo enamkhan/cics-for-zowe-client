@@ -239,7 +239,7 @@ describe("CMCI - Define transaction", () => {
     it("should be able to define a transaction with cicsPlex specified but empty string", async () => {
       defineParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-                CicsCmciConstants.CICS_DEFINITION_TRANSACTION + "//" + region;
+                CicsCmciConstants.CICS_DEFINITION_TRANSACTION + "/" + region;
 
       response = await defineTransaction(dummySession, defineParms);
 

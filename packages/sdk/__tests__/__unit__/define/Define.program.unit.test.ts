@@ -196,7 +196,7 @@ describe("CMCI - Define program", () => {
     it("should be able to define a program with cicsPlex specified but empty string", async () => {
       defineParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-                CicsCmciConstants.CICS_DEFINITION_PROGRAM + "//" + region;
+                CicsCmciConstants.CICS_DEFINITION_PROGRAM + "/" + region;
 
       response = await defineProgram(dummySession, defineParms);
 

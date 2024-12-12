@@ -151,7 +151,7 @@ describe("CMCI - Refresh program", () => {
     it("should be able to refresh a program with cicsPlex specified but empty string", async () => {
       refreshParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-                CicsCmciConstants.CICS_PROGRAM_RESOURCE + "//" + region +
+                CicsCmciConstants.CICS_PROGRAM_RESOURCE + "/" + region +
                 "?CRITERIA=(PROGRAM%3D" + refreshParms.name + ")";
 
       response = await programNewcopy(dummySession, refreshParms);

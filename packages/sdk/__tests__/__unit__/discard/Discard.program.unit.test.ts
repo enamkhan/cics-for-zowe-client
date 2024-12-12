@@ -141,7 +141,7 @@ describe("CMCI - Discard program", () => {
     it("should be able to discard a program with cicsPlex specified but empty string", async () => {
       discardParms.cicsPlex = "";
       endPoint = "/" + CicsCmciConstants.CICS_SYSTEM_MANAGEMENT + "/" +
-                CicsCmciConstants.CICS_PROGRAM_RESOURCE + "//" + region +
+                CicsCmciConstants.CICS_PROGRAM_RESOURCE + "/" + region +
                 "?CRITERIA=(PROGRAM%3D" + discardParms.name + ")";
 
       response = await discardProgram(dummySession, discardParms);
