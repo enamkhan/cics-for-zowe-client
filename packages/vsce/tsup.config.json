@@ -11,6 +11,6 @@
     "vscode",
     "ssh2"
   ],
-  "minify": "terser",
+  "minify": false,
   "noExternal": []
 }
