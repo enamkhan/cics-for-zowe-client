@@ -314,6 +314,7 @@ export class ProfileManagement {
         queryParams: {
           summonly: true,
           nodiscard: true,
+          overrideWarningCount: true,
         }
       });
       if (allProgramsResponse.response.resultsummary.api_response1_alt === "OK") {

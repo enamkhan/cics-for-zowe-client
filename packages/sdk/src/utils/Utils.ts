@@ -57,6 +57,11 @@ export class Utils {
       delimiter = "&";
     }
 
+    if (options && options.queryParams && options.queryParams.overrideWarningCount) {
+      cmciResource += `${delimiter}${CicsCmciConstants.OVERRIDE_WARNING_COUNT}`;
+      delimiter = "&";
+    }
+
     return cmciResource;
   }
 

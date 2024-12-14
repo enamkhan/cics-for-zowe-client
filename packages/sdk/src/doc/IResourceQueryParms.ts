@@ -18,4 +18,8 @@ export interface IResourceQueryParams {
    * Include NODISCARD query parameter
    */
   nodiscard?: boolean;
+  /**
+   * Include OVERRIDEWARNINGCOUNT query parameter
+   */
+  overrideWarningCount?: boolean;
 }
