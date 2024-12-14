@@ -12,7 +12,7 @@
 /**
  * Constants to be used by the API
  */
-export const CicsCmciConstants: { [key: string]: any } = {
+export const CicsCmciConstants = {
   /**
      * Specifies the required part of the REST interface URI
      */
