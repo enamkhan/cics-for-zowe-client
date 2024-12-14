@@ -30,10 +30,11 @@ export async function getResource(session: AbstractSession, parms: IResourceParm
   Logger.getAppLogger().debug("Attempting to get resource(s) with the following parameters:\n%s", JSON.stringify(parms));
 
   const options: IGetResourceUriOptions = {
-    "cicsPlex": parms.cicsPlex,
-    "regionName": parms.regionName,
-    "criteria": parms.criteria,
-    "parameter": parms.parameter
+    cicsPlex: parms.cicsPlex,
+    regionName: parms.regionName,
+    criteria: parms.criteria,
+    parameter: parms.parameter,
+    queryParams: parms.queryParams,
   };
 
   const cmciResource = Utils.getResourceUri(parms.name, options);
